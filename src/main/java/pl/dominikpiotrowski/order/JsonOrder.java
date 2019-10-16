@@ -15,7 +15,7 @@ import java.util.List;
 
 public class JsonOrder extends Thread {
 
-    public List<ItemOrdered> read(String file) throws IOException, InterruptedException {
+    public List<ItemOrdered> read(String file) throws InterruptedException {
 
         List<ItemOrdered> vehicles = new ArrayList<>();
 
@@ -32,41 +32,47 @@ public class JsonOrder extends Thread {
 
                 VehicleBuilder vehicleBuilder = new VehicleBuilder();
 
-                if (item.equals("car")) {
-                    Thread t1 = new Thread();
-                    t1.start();
-                    t1.sleep(10000);
+                switch (item) {
 
-                    ItemOrdered createCar = vehicleBuilder
-                            .withProductionCost(ProdutionCost.CAR)
-                            .withProductionTime(ProductionTime.CAR)
-                            .build();
-                    vehicles.add(createCar);
+                    case "car":
+                        Thread t1 = new Thread();
+                        t1.start();
+                        t1.sleep(10000);
 
-                } else if (item.equals("truck")) {
-                    Thread t2 = new Thread();
-                    t2.start();
-                    t2.sleep(15000);
+                        ItemOrdered createCar = vehicleBuilder
+                                .withProductionCost(ProdutionCost.CAR)
+                                .withProductionTime(ProductionTime.CAR)
+                                .build();
+                        vehicles.add(createCar);
+                        break;
 
-                    ItemOrdered createTruck = vehicleBuilder
-                            .withProductionCost(ProdutionCost.TRUCK)
-                            .withProductionTime(ProductionTime.TRUCK)
-                            .build();
-                    vehicles.add(createTruck);
+                    case "truck":
+                        Thread t2 = new Thread();
+                        t2.start();
+                        t2.sleep(15000);
 
-                } else if (item.equals("motocycle")) {
-                    Thread t3 = new Thread();
-                    t3.start();
-                    t3.sleep(5000);
+                        ItemOrdered createTruck = vehicleBuilder
+                                .withProductionCost(ProdutionCost.TRUCK)
+                                .withProductionTime(ProductionTime.TRUCK)
+                                .build();
+                        vehicles.add(createTruck);
+                        break;
 
-                    ItemOrdered createMotocycle = vehicleBuilder
-                            .withProductionCost(ProdutionCost.MOTORCYCLE)
-                            .withProductionTime(ProductionTime.MOTORCYCLE)
-                            .build();
-                    vehicles.add(createMotocycle);
+                    case "motocycle":
+                        Thread t3 = new Thread();
+                        t3.start();
+                        t3.sleep(5000);
+
+                        ItemOrdered createMotocycle = vehicleBuilder
+                                .withProductionCost(ProdutionCost.MOTORCYCLE)
+                                .withProductionTime(ProductionTime.MOTORCYCLE)
+                                .build();
+                        vehicles.add(createMotocycle);
+                        break;
                 }
             }
         } catch (IOException ex) {
+            System.out.println("Please check your order entry file");
             ex.printStackTrace();
         }
 
@@ -79,7 +85,7 @@ public class JsonOrder extends Thread {
         return vehicles;
     }
 
-    private void notifyObserver(Long cost, List orderList) throws IOException {
+    private void notifyObserver(Long cost, List orderList) {
         JsonOrderLogWriter jsonOrderLogWriter = new JsonOrderLogWriter();
         jsonOrderLogWriter.notify(cost, orderList);
     }
